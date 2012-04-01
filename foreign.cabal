@@ -27,8 +27,8 @@ library
     unordered-containers >= 0.2.1   && < 0.3
 
   exposed-modules:
-    Foreign.Function.Interface
     Foreign.Function.Interface.Type
+    Foreign.Function.Interface.Result
 
   -- ghc already imports libffi
   if !impl(ghc)
