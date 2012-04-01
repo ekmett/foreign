@@ -19,55 +19,6 @@ import Data.Default
 import Data.Hashable
 import Data.Interned
 
-data Signature = Signature
-  { signatureId        :: {-# UNPACK #-} !Id
-  , signatureInterface :: {-# UNPACK #-} !(Ptr CInterface)
-  , signatureArity     :: {-# UNPACK #-} !Int
-  , signatureABI       :: {-# UNPACK #-} !ABI
-  , signatureArguments :: [Type]
-  , signatureResult    :: {-# UNPACK #-} !Type
-  }
-
-instance Eq Signature where
-  a == b = signatureId a == signatureId b
-
-instance Hashable Signature where
-  hash a = hash (signatureId a)
-  hashWithSalt n a = hashWithSalt n (signatureId a)
-
-instance Interned Signature where
-  data Description Signature = DSignature ABI [Id] Id deriving (Eq)
-  type Uninterned Signature = Sig
-  describe (Sig abi args result) = DSignature abi (map typeId args) (typeId result)
-  identity (Signature n _ _ _ _) = n
-  identify slot (Sig abi args result) = unsafePerformIO $ do
-    let n = length args
-    cif <- mallocBytes (#sizeof ffi_cif)
-    argTypes <- mallocBytes $ sizeOf (Ptr ()) * n
-    let go [] _ = return ()
-        go (t:ts) i = do
-          pokeElemOff argTypes i (typePtr t)
-          go rest $! i + 1
-    go args 0
-    ffi_prep_cif cif abi n (Unsafe.unsafeForeignPtrToPtr fpresult) argTypes
-    return $! Signature slot cif abi args result
-
-instance Hashable (Description Signature) where
-  hashWithSalt n (DSignature abi xs  = n `hashWithSalt` 
-
--- a representation of a list of arguments and a result, sans abi
-data Sig = Sig ABI [Type] Type deriving (Eq,Data,Typeable)
-
-instance Hashable Sig where
-  hashWithSalt n (Sg as r) = n `hashWithSalt` as `hashWithSalt` r
-
-sig :: ABI -> Type -> Sig
-sig = Sig abi []
-
-infixr 0 ->
-(~>) :: Type -> Sig -> Sig
-a ~> Fun as r = Fun (a:as) r
-
 data CInterface deriving Typeable
 
 instance Foreign
