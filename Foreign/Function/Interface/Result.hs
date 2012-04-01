@@ -1,5 +1,5 @@
+{-# LANGUAGE ExistentialQuantification #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-# LANGUAGE ExistentialTypes #-}
 {-# LANGUAGE EmptyDataDecls #-}
 {-# LANGUAGE Rank2Types #-}
 module Foreign.Function.Interface.Result

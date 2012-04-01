@@ -21,14 +21,18 @@ library
   ghc-options: -Wall
 
   build-depends:
-    base                 >= 4.4     && < 5,
+    base                 >= 4.5     && < 5,
+    contravariant        >= 0.2     && < 0.3,
+    data-default         >= 0.3     && < 0.4,
     hashable             >= 1.1.2.2 && < 1.2,
     intern               >= 0.8.0.1 && < 0.9,
-    unordered-containers >= 0.2.1   && < 0.3
+    unordered-containers >= 0.2.1   && < 0.3,
+    ghc-prim
 
   exposed-modules:
-    Foreign.Function.Interface.Type
-    Foreign.Function.Interface.Result
+    Foreign.Function.Type
+    Foreign.Function.ABI
+    Foreign.Function.Struct
 
   -- ghc already imports libffi
   if !impl(ghc)
