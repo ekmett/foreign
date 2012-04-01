@@ -1,0 +1,35 @@
+name:          foreign
+category:      Foreign
+version:       0.1
+license:       BSD3
+cabal-version: >= 1.6
+license-file:  LICENSE
+author:        Edward A. Kmett
+maintainer:    Edward A. Kmett <ekmett@gmail.com>
+stability:     experimental
+homepage:      http://github.com/ekmett/foreign/
+copyright:     Copyright (C) 2012 Edward A. Kmett
+synopsis:      A dynamic foreign function interface
+description:   A dynamic foreign function interface
+build-type:    Simple
+
+source-repository head
+  type: git
+  location: git://github.com/ekmett/foreign.git
+
+library
+  ghc-options: -Wall
+
+  build-depends:
+    base                 >= 4.4     && < 5,
+    hashable             >= 1.1.2.2 && < 1.2,
+    intern               >= 0.8.0.1 && < 0.9,
+    unordered-containers >= 0.2.1   && < 0.3
+
+  exposed-modules:
+    Foreign.Function.Interface
+    Foreign.Function.Interface.Type
+
+  -- ghc already imports libffi
+  if !impl(ghc)
+    extra-libraries: ffi
